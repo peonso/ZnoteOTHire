@@ -2,9 +2,11 @@ ZnoteAAC for OTHire
 ========
 
 original ZnoteAAC repository [GitHub](https://github.com/Znote/ZnoteAAC)
+
 Based in ZnoteAAC 1.5 from 24/07/2014
 
 This version is converted to work with OTHire [GitHub](https://github.com/Znote/ZnoteAAC)
+
 Was tested with OTHire 0.0.2 compiled with `__OLD_GUILD_SYSTEM__`
 
 * There isn't `name` in `accounts` table, changed everything that calls for `name` to call `id` instead
