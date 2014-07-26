@@ -5,7 +5,7 @@ original ZnoteAAC repository [GitHub](https://github.com/Znote/ZnoteAAC)
 
 Based in ZnoteAAC 1.5 from 24/07/2014
 
-This version is converted to work with OTHire [GitHub](https://github.com/Znote/ZnoteAAC)
+This version is converted to work with OTHire [GitHub](https://github.com/TwistedScorpio/OTHire)
 
 Was tested with OTHire 0.0.2 compiled with `__OLD_GUILD_SYSTEM__`
 
