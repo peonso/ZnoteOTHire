@@ -222,6 +222,16 @@ CREATE TABLE IF NOT EXISTS `znote_guild_wars` (
   FOREIGN KEY (`id`) REFERENCES `guild_wars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+CREATE TABLE `guild_membership` (
+  `player_id` int(11) NOT NULL,
+  `guild_id` int(11) NOT NULL,
+  `rank_id` int(11) NOT NULL,
+  `nick` varchar(15) NOT NULL DEFAULT '',
+  PRIMARY KEY (`player_id`),
+  KEY `guild_id` (`guild_id`),
+  KEY `rank_id` (`rank_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `guild_wars` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `guild1` int(11) NOT NULL DEFAULT '0',
