@@ -9,6 +9,7 @@ This version is converted to work with OTHire [GitHub](https://github.com/Twiste
 
 Was tested with OTHire 0.0.2 compiled with `__OLD_GUILD_SYSTEM__`
 
+* Did NOT tested anything related to shop, nor item market
 * There isn't `name` in `accounts` table, changed everything that calls for `name` to call `id` instead
 * Handle Kills as TFS_03
 * Handle Group_id as TFS_03 (no `type` in `account` tables)

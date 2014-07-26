@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `guild_wars` (
   PRIMARY KEY (`id`),
   KEY `guild1` (`guild1`),
   KEY `guild2` (`guild2`)
-)
+) ENGINE=InnoDB ;
 
 ALTER TABLE guilds
   ADD motd varchar(255) NOT NULL;
