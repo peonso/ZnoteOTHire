@@ -1,5 +1,5 @@
 <div class="sidebar">
-	<h2>Welcome, <?php echo $user_data['id']; ?>.</h2>
+	<h2>Logged in as account <b><?php echo $user_data['id']; ?></b>.</h2>
 	<div class="inner">
 		<ul>
 			<li>

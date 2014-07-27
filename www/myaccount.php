@@ -221,7 +221,7 @@ if (!empty($_POST['selected_comment'])) {
 		<p>Welcome to your account page, logged in with account number <b><?php echo $user_data['id']; ?></b>.<br>
 		<?php 			
 		if ($user_data['premend'] != 0) {
-				echo 'Your premium account will last till';
+				echo 'Your premium account will last till ';
 				echo date("d/m/Y, H:i:s",$user_data['premend']);
 				echo '.';
 			} else {

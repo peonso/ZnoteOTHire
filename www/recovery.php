@@ -33,8 +33,8 @@ if (isset($_GET['mode']) === true && in_array($_GET['mode'], $mode_allowed) === 
 								// User exist, email exist, character exist. Lets start the recovery function
 								user_recover($_GET['mode'], $_POST['edom'], $_POST['email'], $_POST['character'], ip2long(getIP()));
 								//echo 'password';
-							} else { echo 'That username ['. $_POST['edom'] .'] is incorrect.'; }
-						} else { echo 'You forgot to write username.'; }
+							} else { echo 'That account number ['. $_POST['edom'] .'] is incorrect.'; }
+						} else { echo 'You forgot to write account number.'; }
 					}
 					// end EDOM
 				} else { echo 'That character name does not exist.'; }
