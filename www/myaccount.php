@@ -219,7 +219,15 @@ if (!empty($_POST['selected_comment'])) {
 	<div id="myaccount">
 		<h1>My account</h1>
 		<p>Welcome to your account page, logged in with account number <b><?php echo $user_data['id']; ?></b>.<br>
-		 Your premium account will last till <?php echo date("d/m/Y, H:i:s",$user_data['premend']); ?>.</p>
+		<?php 			
+		if ($user_data['premend'] != 0) {
+				echo 'Your premium account will last till';
+				echo date("d/m/Y, H:i:s",$user_data['premend']);
+				echo '.';
+			} else {
+				echo 'You does not have premium account days.';
+			}
+		?></p>
 		<h2>Character List: <?php echo $char_count; ?> characters.</h2>
 		<?php
 		//data_dump($user_data, false, "data");

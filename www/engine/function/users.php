@@ -1101,7 +1101,6 @@ function user_create_character($character_data) {
 		'lookhead' => $cnf['lookHead'],
 		'looklegs' => $cnf['lookLegs'],
 		'looktype' => $outfit_type,
-		'lookaddons' => 0,
 		'maglevel' => 0,
 		'mana' => $cnf['mana'],
 		'manamax' => $cnf['mana'],
