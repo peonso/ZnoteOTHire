@@ -396,6 +396,8 @@ INSERT INTO `player_items` (`player_id`, `sid`, `pid`, `itemtype`, `count`, `att
 (6, 129, 116, 2268, 100, 0x166400),
 (6, 130, 116, 2268, 100, 0x166400);
 
+TRUNCATE player_skills;
+
 INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES
 (1, 0, 10, 0),
 (1, 1, 10, 0),
