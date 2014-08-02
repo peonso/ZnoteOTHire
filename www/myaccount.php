@@ -225,7 +225,7 @@ if (!empty($_POST['selected_comment'])) {
 				echo date("d/m/Y, H:i:s",$user_data['premend']);
 				echo '.';
 			} else {
-				echo 'You does not have premium account days.';
+				echo 'You do not have premium account days.';
 			}
 		?></p>
 		<h2>Character List: <?php echo $char_count; ?> characters.</h2>
