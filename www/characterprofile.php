@@ -9,7 +9,7 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
 		if ($config['TFSVersion'] == 'TFS_10') {
 			$profile_data = user_character_data($user_id, 'name', 'level', 'vocation', 'lastlogin', 'sex');
 			$profile_data['online'] = user_is_online_10($user_id);
-		} else $profile_data = user_character_data($user_id, 'name', 'level', 'vocation', 'lastlogin', 'online', 'sex');
+		} else $profile_data = user_character_data($user_id, 'name', 'level', 'vocation', 'lastlogin', 'online', 'sex', 'group_id');
 		$profile_znote_data = user_znote_character_data($user_id, 'created', 'hide_char', 'comment');
 		
 		$guild_exist = false;
@@ -24,6 +24,18 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
 			<h1><font class="profile_font" name="profile_font_header">Profile: <?php echo $profile_data['name']; ?></font></h1>
 			<ul class="unstyled">
 				
+				<?php 
+				if ($profile_data['group_id'] > 1) {
+				?>
+				<li><font class="profile_font" name="profile_font_position">Position: <?php 
+				foreach ($config['ingame_positions'] as $key=>$value) {
+					if ($key == $profile_data['group_id']) {
+						echo $value;
+					}
+				} ?></font></li>
+					<?php
+				}
+				?>
 				<li><font class="profile_font" name="profile_font_level">Sex:<?php 
 				if ($profile_data['sex'] == 1) {
 				echo 'Male';
@@ -170,7 +182,7 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
                                 if ($config['TFSVersion'] == 'TFS_10' && $config['EnableQuests'] == true)
                                 {
                                         $sqlquests =  mysql_select_multi("SELECT `player_id`, `key`, `value` FROM player_storage WHERE `player_id` = $user_id");
-                                        foreach ($config['quests'] as $cquest)
+                                        foreach ($config['Quests'] as $cquest)
                                         {
                                                 $totalquests = $totalquests + 1;
                                                 foreach ($sqlquests as $dbquest)

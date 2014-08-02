@@ -13,7 +13,7 @@ if (isset($_GET['mode']) === true && in_array($_GET['mode'], $mode_allowed) === 
 		$mail = $_POST['email'];
 		$acc_id = user_id_from_email($mail);
 			if (isset($_POST['character']) === true && empty($_POST['character']) === false) {
-				if (user_character_exist($_POST['character']) === true) {
+				if (user_character_exist($_POST['character'])> 0) {
 					// EDOM
 					if ($_GET['mode'] === 'username') { // Recover password, edom == username
 						// edom == password
