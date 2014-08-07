@@ -5,8 +5,8 @@ if ($config['log_ip']) {
 
 $house = getValue($_GET['id']);
 
-if ($house !== false && $config['TFSVersion'] === 'TFS_10') {
-	$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid`, `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='$house';");
+if ($house !== false && $config['TFSVersion'] === 'OTH') {
+	$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid` as `town_id`, `tiles` as `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='$house';");
 	$minbid = $config['houseConfig']['minimumBidSQM'] * $house['size'];
 	if ($house['owner'] > 0) $house['ownername'] = user_name($house['owner']);
 
@@ -49,13 +49,13 @@ if ($house !== false && $config['TFSVersion'] === 'TFS_10') {
 								if ($house['bid_end'] > 0) {
 									if ($house['bid_end'] > time()) {
 										mysql_update("UPDATE `houses` SET `highest_bidder`='". $player['id'] ."', `bid`='$bid_amount', `last_bid`='$lastbid' WHERE `id`='". $house['id'] ."' LIMIT 1;");
-										$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid`, `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
+										$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid` as `town_id`, `tiles` as `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
 									}
 								} else {
 									$lastbid = $minbid + 1;
 									$bidend = time() + $config['houseConfig']['auctionPeriod'];
 									mysql_update("UPDATE `houses` SET `highest_bidder`='". $player['id'] ."', `bid`='$bid_amount', `last_bid`='$lastbid', `bid_end`='$bidend' WHERE `id`='". $house['id'] ."' LIMIT 1;");
-									$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid`, `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
+									$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid` as `town_id`, `tiles` as `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
 								}
 								echo "<b><font color='green'>You have the highest bid on this house!</font></b>";
 							} else echo "<b><font color='red'>You need to place a bid that is higher or equal to {$minbid}gp.</font></b>";
@@ -67,7 +67,7 @@ if ($house !== false && $config['TFSVersion'] === 'TFS_10') {
 								if ($house['highest_bidder'] != $player['id']) {
 									$lastbid = $bid_amount + 1;
 									mysql_update("UPDATE `houses` SET `last_bid`='$lastbid' WHERE `id`='". $house['id'] ."' LIMIT 1;");
-									$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid`, `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
+									$house = mysql_select_single("SELECT `id`, `owner`, `paid`, `name`, `rent`, `townid` as `town_id`, `tiles` as `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` WHERE `id`='". $house['id'] ."';");
 									echo "<b><font color='orange'>Unfortunately your bid was not higher than previous bidder.</font></b>";
 								} else {
 									echo "<b><font color='orange'>You already have a higher pledge on this house.</font></b>";
@@ -88,8 +88,8 @@ if ($house !== false && $config['TFSVersion'] === 'TFS_10') {
 	<ul>
 		<li><b>Town</b>: 
 		<?php
-		$town_name = &$config['towns'][$house['townid']];
-		echo "<a href='houses.php?id=". $house['townid'] ."'>". ($town_name ? $town_name : 'Specify town id ' . $house['townid'] . ' name in config.php first.') ."</a>";
+		$town_name = &$config['towns'][$house['town_id']];
+		echo "<a href='houses.php?id=". $house['town_id'] ."'>". ($town_name ? $town_name : 'Specify town id ' . $house['town_id'] . ' name in config.php first.') ."</a>";
 		?></li>
 		<li><b>Size</b>: <?php echo $house['size']; ?></li>
 		<li><b>Beds</b>: <?php echo $house['beds']; ?></li>

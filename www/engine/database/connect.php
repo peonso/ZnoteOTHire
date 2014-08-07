@@ -248,6 +248,11 @@ CREATE TABLE IF NOT EXISTS `guild_wars` (
 
 ALTER TABLE guilds
   ADD motd varchar(255) NOT NULL;
+  
+ALTER TABLE houses ADD `bid` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE houses ADD `bid_end` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE houses ADD `last_bid` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE houses ADD `highest_bidder` int(11) NOT NULL DEFAULT '0';
 </textarea>
 	</li>
 	<li>

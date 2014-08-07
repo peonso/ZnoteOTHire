@@ -1,13 +1,12 @@
 <?php
 require_once 'engine/init.php';
 include 'layout/overall/header.php';
-if ($config['log_ip']) 
+
+if ($config['log_ip'])
 	znote_visitor_insert_detailed_data(3);
 
 if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
-	
-	#if ($_POST['token'] == $_SESSION['token']) {
-	
+
 	/* Token used for cross site scripting security */
 	if (isset($_POST['token']) && Token::isValid($_POST['token'])) {
 		
@@ -81,7 +80,7 @@ if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
 			header('Location: sub.php?page=houses');
 		else
 			echo 'Sub page system disabled.';
-	} else if ($config['TFSVersion'] === 'OTH') {
+	} else if ($config['TFSVersion'] === 'TFS_02') {
 		$house = $config['house'];
 		if (!is_file($house['house_file'])) {
 			echo("<h3>House file not found</h3><p>FAILED TO LOCATE/READ FILE AT:<br><font color='red'>". $house['house_file'] ."</font><br><br>LINUX users: Make sure www-data have read access to file.<br>WINDOWS users: Learn to write correct file path.</p>");
@@ -95,7 +94,7 @@ if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
 			
 			$cache->setContent($house_query);
 			$cache->save();
-		} else 
+		} else
 			$house_query = $cache->load();
 
 		$sqmPrice = $house['price_sqm'];
@@ -114,10 +113,9 @@ if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
 
 				<?php
 				//execute code.
-				foreach($house_query as $row) 
+				foreach($house_query as $row)
 					$house_info[(int)$row['id']] = '<a href="characterprofile.php?name='. $row['name'] .'">'. $row['name'] .'</a>';
 
-					
 				foreach ($house_load as $house_fetch){
 					$house_price = (int)$house_fetch['size'] * $sqmPrice;
 					?>
@@ -144,57 +142,82 @@ if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
 			</table>
 			<?php
 		} else echo '<p><font color="red">Something is wrong with the cache.</font></p>';
-	} else if ($config['TFSVersion'] === 'TFS_10') {
+	} else if ($config['TFSVersion'] === 'OTH') {
 		// Fetch values
-		$townid = (getValue($_GET['id']) !== false) ? (int)$_GET['id'] : $config['houseConfig']['HouseListDefaultTown'];
+		$querystring_id = &$_GET['id'];
+		$townid = ($querystring_id) ? (int)$_GET['id'] : $config['houseConfig']['HouseListDefaultTown'];
 		$towns = $config['towns'];
+
+		$order = &$_GET['order'];
+		$type = &$_GET['type'];
 
 		// Create Search house box
 		?>
-		<form action="" method="get">
+		<form action="" method="get" style="width: 648px">
 			<b>Select town:</b>
 			<select name="id">
 			<?php
-			foreach ($towns as $id => $name) {
-				if ($id != $townid) echo '<option value="'. $id .'">'. $name .'</option>';
-				else echo '<option value="'. $id .'" selected>'. $name .'</option>';
-			}
+			foreach ($towns as $id => $name)
+				echo '<option value="'. $id .'"' . ($townid != $id ?: ' selected') . '>'. $name .'</option>';
 			?>
-			</select> 
-
-			<input type="submit" value="Fetch houses">
+			</select>
+			<b style="padding-left: 8px;">Order:</b>
+			<select name="order">
+			<?php
+			$order_allowed = array('id', 'name', 'size', 'beds', 'rent', 'owner');
+			foreach($order_allowed as $o)
+				echo '<option value="' . $o . '"' . ($o != $order ?: ' selected') . '>' . ucfirst($o) . '</option>';
+			?>
+			</select>
+			<select name="type">
+			<?php
+			$type_allowed = array('desc', 'asc');
+			foreach($type_allowed as $t)
+				echo '<option value="' . $t . '"' . ($t != $type ?: ' selected') . '>' . ($t == 'desc' ? 'Descending' : 'Ascending') .'</option>';
+			?>
+			</select>
+			<input type="submit" value="Fetch houses" style="margin-left: 8px;"/>
 		</form>
 		<?php
-		
+		if(!in_array($order, $order_allowed))
+			$order = 'id';
+
+		if(!in_array($type, $type_allowed))
+			$type = 'desc';
+
 		// Create or fetch data from cache
-		$cache = new Cache('engine/cache/houses');
+		$cache = new Cache('engine/cache/houses/houses-' . $order . '-' . $type);
 		$houses = array();
 		if ($cache->hasExpired()) {
-			$houses = mysql_select_multi("SELECT `id`, `owner`, `paid`, `warnings`, `name`, `rent`, `town_id`, `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses`;");
-
+			$houses = mysql_select_multi("SELECT `id`, `owner`, `paid`, `warnings`, `name`, `rent`, `townid` as `town_id`, `tiles` as `size`, `beds`, `bid`, `bid_end`, `last_bid`, `highest_bidder` FROM `houses` ORDER BY {$order} {$type};");
 			if ($houses !== false) {
 				// Fetch player names
 				$playerlist = array();
-				foreach ($houses as $h) if ($h['owner'] > 0) $playerlist[] = $h['owner'];
+
+				foreach ($houses as $h)
+					if ($h['owner'] > 0)
+						$playerlist[] = $h['owner'];
+
 				if (!empty($playerlist)) {
-					$ids = join(',',$playerlist);
+					$ids = join(',', $playerlist);
 					$tmpPlayers = mysql_select_multi("SELECT `id`, `name` FROM players WHERE `id` IN ($ids);");
+
 					// Sort $tmpPlayers by player id
 					$tmpById = array();
-					foreach ($tmpPlayers as $p) 
+					foreach ($tmpPlayers as $p)
 						$tmpById[$p['id']] = $p['name'];
-					for ($i = 0; $i < count($houses); $i++) {
+
+					for ($i = 0; $i < count($houses); $i++)
 						if ($houses[$i]['owner'] > 0)
 							$houses[$i]['ownername'] = $tmpById[$houses[$i]['owner']];
-					}
 				}
 
 				$cache->setContent($houses);
 				$cache->save();
 			}
-		} else 
+		} else
 			$houses = $cache->load();
-		
+
 		if ($houses !== false || !empty($houses)) {
 			// Intialize stuff
 			//data_dump($houses, false, "House data");
@@ -219,25 +242,25 @@ if (empty($_POST) === false && $config['TFSVersion'] === 'TFS_03') {
 							<td><?php echo $house['rent']; ?></td>
 							<?php
 							// Status:
-							if ($house['owner'] != 0) {
+							if ($house['owner'] != 0)
 								echo "<td><a href='characterprofile.php?name=". $house['ownername'] ."' target='_BLANK'>". $house['ownername'] ."</a></td>";
-							} else {
-								if ($house['highest_bidder'] == 0) {
-									echo "<td>None</td>";
-								} else {
-									echo "<td><b>Selling</b></td>";
-								}
-							}
+							else
+								echo ($house['highest_bidder'] == 0 ? '<td>None</td>' : '<td><b>Selling</b></td>');
 							?>
-							<td><?php echo $towns[$house['town_id']]; ?></td>
+							<td><?php
+							$town_name = &$towns[$house['town_id']];
+							echo ($town_name ? $town_name : 'Specify town id ' . $house['town_id'] . ' name in config.php first.');
+							?></td>
 						</tr>
 						<?php
 					}
 				}
 				?>
 			</table>
+
 			<?php
-		} else echo "<h1>Failed to fetch data from sql->houses table.</h1><p>Is the table empty?</p>";
+		} else
+			echo "<h1>Failed to fetch data from sql->houses table.</h1><p>Is the table empty?</p>";
 	} // End TFS 1.0 logic
 }
 include 'layout/overall/footer.php'; ?>
