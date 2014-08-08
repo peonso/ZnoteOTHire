@@ -35,7 +35,7 @@ CREATE TABLE `accounts` (
   `blocked` tinyint(1) NOT NULL DEFAULT '0',
   `warnings` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=100000 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Triggers `accounts`
@@ -332,7 +332,7 @@ CREATE TABLE `players` (
   KEY `online` (`online`),
   KEY `account_id` (`account_id`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Triggers `players`

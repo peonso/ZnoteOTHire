@@ -16,5 +16,5 @@ Was tested with OTHire 0.0.2 compiled with `__OLD_GUILD_SYSTEM__`
 * Displaying premium days at account properly now, fucking `$user_data['premend']` now working. THX ZNOTE
 * Changes regarding `guilds` (`creationdata` -> `creationdate`; `ownerid` -> `owner_id`)
 * Others thing handled as default or TFS_02
-* Houses.php should be working now. (??auction thing should bug without balance system??)
+* Handle Houses as TFS_10 (`town_id` as `townid` and `size` as `tiles` added some shit through connect.php) (??auction thing should bug without balance system??)
 * Added some tables to .../engine/database/connection.php to force compatibility
