@@ -1123,9 +1123,9 @@ function user_create_character($character_data) {
 		'guildnick' => '',
 		'lastlogout' => 0,
 		'direction' => 0,
-		'loss_experience' => 10,
-		'loss_mana' => 10,
-		'loss_skills' => 10,
+		'loss_experience' => 100,
+		'loss_mana' => 100,
+		'loss_skills' => 100,
 		'loss_items' => 10,
 		'online' => 0,
 		'balance' => 0
