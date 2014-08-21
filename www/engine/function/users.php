@@ -124,7 +124,7 @@ function support_list() {
 		for ($i = 0; $i < count($staffs); $i++) {
 			// $staffs[$i]['']
 			if ($TFS == 'OTH' || $TFS == 'TFS_10') {
-				$player = mysql_select_single("SELECT `group_id` FROM `players` WHERE `account_id` ='". $staffs[$i]['account_id'] ."';");
+				$player = mysql_select_single("SELECT `group_id` FROM `players` WHERE `name` ='". $staffs[$i]['name'] ."';");
 				$staffs[$i]['group_id'] = $player['group_id'];
 				if ($TFS == 'TFS_10') {
 					// Fix online status on TFS 1.0
