@@ -46,6 +46,21 @@ function onSay(cid, words, param)
                 db.query("DELETE FROM `znote_shop_orders` WHERE `id` = " .. q_id)
                 doPlayerSendTextMessage(cid, MESSAGE_INFO_DESCR, "Congratulations! You have received " .. q_count .. " x " .. getItemName(q_itemid) .. "!")
         end
+        
+        if q_type == 2 then
+                doPlayerSendTextMessage(cid, MESSAGE_STATUS_WARNING, "Please first use your premium membership on the website.")
+                return false
+        end
+		
+        if q_type == 3 then
+                doPlayerSendTextMessage(cid, MESSAGE_STATUS_WARNING, "Please first use your change character gender on the website.")
+                return false
+        end
+		
+        if q_type == 4 then
+                doPlayerSendTextMessage(cid, MESSAGE_STATUS_WARNING, "Please first use your change character name on the website.")
+                return false
+        end
  
         -- Add custom order types here
         -- Type 2 is reserved for premium days and is handled on website, not needed here.
